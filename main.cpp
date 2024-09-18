@@ -1,6 +1,8 @@
 #include "includes.h"
 using namespace std;
 
+const int primes[15] = {5, 7, 11, 13, 61, 41, 53, 89, 97, 29, 23, 19, 59, 71, 43};
+
 string convert_to_decimal(const string &input)
 {
     stringstream ss;
@@ -32,22 +34,57 @@ string convert_to_string(const string &decimalString)
     return result;
 }
 
-string Scrambler(const string &input)
+string Scrambler(const string &input, int number_char)
 {
     stringstream ss(input);
     int int_placeholder = 0;
 
     vector<int> values;
+    vector<int> divisors;
     int number;
+    int padding_number = 32 - number_char;
+    cout << padding_number << endl;
+
+    for (int i = 1; i <= padding_number; i++)
+    {
+        if (padding_number % i == 0)
+        {
+            divisors.push_back(i);
+            cout << i << " ";
+        }
+
+        if (i == 1)
+        {
+            divisors.pop_back();
+        }
+
+        if (i == padding_number)
+        {
+            divisors.pop_back();
+        }
+    }
+    cout << endl;
+
+    for (int i : divisors)
+    {
+        cout << i << " ";
+    }
+
+    cout << endl;
+
+    // Finish only works with 21!!!!!!!!!
 
     while (ss >> number)
     {
         values.push_back(number);
     }
 
+    int tracker = 0;
+
     stringstream result;
     for (size_t i = 0; i < values.size(); i++)
     {
+
         int_placeholder = values[i] + 2;
 
         if (int_placeholder + 2 > 126)
@@ -63,8 +100,22 @@ string Scrambler(const string &input)
         {
             result << " ";
         }
+
+        tracker++;
+
+        if (tracker == divisors[0])
+        {
+            for (size_t y = 0; y < divisors[1]; y++)
+            {
+                result << 80 << " ";
+            }
+
+            tracker = 0;
+        } // Update
     }
 
+    values.clear();
+    divisors.clear();
     return result.str();
 }
 
@@ -87,7 +138,7 @@ string string_to_hex(const string &input)
 
 int main()
 {
-    string myString = "Password123";
+    string myString = "Hello World";
 
     string decimalString = convert_to_decimal(myString);
     cout << "Decimal: " << decimalString << endl;
@@ -95,14 +146,14 @@ int main()
     string stringDEC = convert_to_string(decimalString);
     cout << "String: " << stringDEC << endl;
 
-    string val = Scrambler(decimalString);
-    cout << "Srambled decimal: " << val << endl;
+    string scb_dec = Scrambler(decimalString, stringDEC.size());
+    cout << "Srambled decimal: " << scb_dec << endl;
 
-    string hash = convert_to_string(val);
-    cout << "Srambled string: " << hash << endl;
+    string scb_string = convert_to_string(scb_dec);
+    cout << "Srambled string: " << scb_string << endl;
 
-    string hex = string_to_hex(hash);
-    cout << "Hex: " << hex << endl;
+    string hash = string_to_hex(scb_string);
+    cout << "Hash: " << hash << endl;
 
     return 0;
 }
