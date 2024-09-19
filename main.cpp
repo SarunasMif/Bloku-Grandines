@@ -2,6 +2,8 @@
 using namespace std;
 
 const int primes[15] = {5, 7, 11, 13, 61, 41, 53, 89, 97, 29, 23, 19, 59, 71, 43};
+const int start_N = 32;
+const int end_N = 126;
 
 string convert_to_decimal(const string &input)
 {
@@ -80,6 +82,7 @@ string Scrambler(const string &input, int number_char)
     }
 
     int tracker = 0;
+    int track = 0;
 
     stringstream result;
     for (size_t i = 0; i < values.size(); i++)
@@ -92,7 +95,8 @@ string Scrambler(const string &input, int number_char)
             int_placeholder += 2 - 126 + 32;
         }
 
-        result << int_placeholder;
+        srand(1052 + track); // decimal value sum + other value
+        result << (rand() % (end_N - start_N + 1)) + end_N;
 
         // result << values[i] + 2;
 
@@ -102,12 +106,14 @@ string Scrambler(const string &input, int number_char)
         }
 
         tracker++;
+        track++;
 
         if (tracker == divisors[0])
         {
             for (size_t y = 0; y < divisors[1]; y++)
             {
-                result << 80 << " ";
+                srand(primes[track + y]);
+                result << (rand() % (end_N - start_N + 1)) << " ";
             }
 
             tracker = 0;
@@ -138,7 +144,7 @@ string string_to_hex(const string &input)
 
 int main()
 {
-    string myString = "Hello World";
+    string myString = "Hello Werld";
 
     string decimalString = convert_to_decimal(myString);
     cout << "Decimal: " << decimalString << endl;
