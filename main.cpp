@@ -1,8 +1,8 @@
 #include "includes.h"
 using namespace std;
 
-const int primes[15] = {5, 7, 11, 13, 61, 41, 53, 89, 97, 29, 23, 19, 59, 71, 43};
-const int start_N = 32;
+const int primes[32] = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 13};
+const int start_N = 33;
 const int end_N = 126;
 
 string convert_to_decimal(const string &input)
@@ -43,8 +43,14 @@ string Scrambler(const string &input, int number_char)
 
     vector<int> values;
     vector<int> divisors;
+    // Vectors to store values necessary for scrambling text
+
     int number;
-    int padding_number = 32 - number_char;
+    int scramble_key = 0;                  // Key that will be used to seed the rand() values
+    int padding_number = 32 - number_char; // How many extra characters will need to be added
+    int input_interval;                    // How many times i will need to add extra characters
+    int number_of_inputs;                  // How many characters to add per interval
+
     cout << padding_number << endl;
 
     for (int i = 1; i <= padding_number; i++)
@@ -54,18 +60,39 @@ string Scrambler(const string &input, int number_char)
             divisors.push_back(i);
             cout << i << " ";
         }
-
-        if (i == 1)
-        {
-            divisors.pop_back();
-        }
-
-        if (i == padding_number)
-        {
-            divisors.pop_back();
-        }
     }
     cout << endl;
+
+    int number_of_divisors = divisors.size();
+
+    if (number_of_divisors == 1)
+    {
+        input_interval = divisors[0];
+        number_of_inputs = padding_number;
+    }
+
+    if (number_of_divisors == 2)
+    {
+        input_interval = divisors[0];
+        number_of_inputs = divisors[1];
+    }
+
+    if (number_of_divisors == 3)
+    {
+        input_interval = divisors[1];
+        number_of_inputs = divisors[1];
+    }
+
+    if (number_of_divisors >= 4)
+    {
+        divisors.erase(divisors.begin());
+        divisors.pop_back();
+        input_interval = divisors[0];
+        int placeholder = divisors.size();
+        number_of_inputs = divisors[placeholder - 1];
+    }
+
+    cout << input_interval << ", " << number_of_inputs << endl;
 
     for (int i : divisors)
     {
@@ -81,6 +108,13 @@ string Scrambler(const string &input, int number_char)
         values.push_back(number);
     }
 
+    for (int i : values)
+    {
+        scramble_key += i;
+    }
+
+    cout << scramble_key << endl;
+
     int tracker = 0;
     int track = 0;
 
@@ -95,7 +129,7 @@ string Scrambler(const string &input, int number_char)
             int_placeholder += 2 - 126 + 32;
         }
 
-        srand(1052 + track); // decimal value sum + other value
+        srand(scramble_key + track); // decimal value sum + other value
         result << (rand() % (end_N - start_N + 1)) + end_N;
 
         // result << values[i] + 2;
@@ -108,11 +142,11 @@ string Scrambler(const string &input, int number_char)
         tracker++;
         track++;
 
-        if (tracker == divisors[0])
+        if (tracker == input_interval)
         {
-            for (size_t y = 0; y < divisors[1]; y++)
+            for (size_t y = 0; y < number_of_inputs; y++)
             {
-                srand(primes[track + y]);
+                srand(scramble_key + primes[track + y]);
                 result << (rand() % (end_N - start_N + 1)) << " ";
             }
 
@@ -144,7 +178,7 @@ string string_to_hex(const string &input)
 
 int main()
 {
-    string myString = "Hello Werld";
+    string myString = "Hee";
 
     string decimalString = convert_to_decimal(myString);
     cout << "Decimal: " << decimalString << endl;
