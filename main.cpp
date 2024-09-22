@@ -85,11 +85,9 @@ string Scrambler(const string &input, int number_char)
         number_char -= overflow;
     }
 
-    int number_of_divisors = divisors.size();
-
     int padding_number = 32 - number_char;
 
-    cout << padding_number << endl;
+    cout << "Padding number: " << padding_number << endl;
 
     for (int i = 1; i <= padding_number; i++)
     {
@@ -99,6 +97,8 @@ string Scrambler(const string &input, int number_char)
             cout << i << " ";
         }
     }
+
+    int number_of_divisors = divisors.size();
 
     if (number_of_divisors == 1)
     {
@@ -183,6 +183,7 @@ string Scrambler(const string &input, int number_char)
 
     values.clear();
     divisors.clear();
+    extras.clear();
     return result.str();
 }
 
@@ -203,24 +204,53 @@ string string_to_hex(const string &input)
     return output;
 }
 
+void input_by_hand()
+{
+    string input;
+    cout << "Input: ";
+    cin >> input;
+
+    string decimalString = convert_to_decimal(input);
+    string stringDEC = convert_to_string(decimalString);
+    string scb_dec = Scrambler(decimalString, stringDEC.size());
+    string scb_string = convert_to_string(scb_dec);
+    string hash = string_to_hex(scb_string);
+
+    cout << "Hash: " << hash << endl;
+}
+
 int main()
 {
-    string myString = "cfd2d9818e95a2a8b5c9d0859299a6b9cdd389969db0bdd18d9aa1aeb4c19195";
+    // string myString = "la";
 
-    string decimalString = convert_to_decimal(myString);
-    cout << "Decimal: " << decimalString << endl;
+    // string decimalString = convert_to_decimal(myString);
+    // cout << "Decimal: " << decimalString << endl;
 
-    string stringDEC = convert_to_string(decimalString);
-    cout << "String: " << stringDEC << endl;
+    // string stringDEC = convert_to_string(decimalString);
+    // cout << "String: " << stringDEC << endl;
 
-    string scb_dec = Scrambler(decimalString, stringDEC.size());
-    cout << "Srambled decimal: " << scb_dec << endl;
+    // string scb_dec = Scrambler(decimalString, stringDEC.size());
+    // cout << "Srambled decimal: " << scb_dec << endl;
 
-    string scb_string = convert_to_string(scb_dec);
-    cout << "Srambled string: " << scb_string << endl;
+    // string scb_string = convert_to_string(scb_dec);
+    // cout << "Srambled string: " << scb_string << endl;
 
-    string hash = string_to_hex(scb_string);
-    cout << "Hash: " << hash << endl;
+    // string hash = string_to_hex(scb_string);
+    // cout << "Hash: " << hash << endl;
 
+    int input_type;
+
+    do
+    {
+        cout << "To input by file enter [1]; To input by hand type [2];" << endl;
+        cout << "Input: ";
+        cin >> input_type;
+
+    } while (input_type < 1 || input_type > 2);
+
+    if (input_type == 2)
+    {
+        input_by_hand();
+    }
     return 0;
 }
