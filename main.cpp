@@ -219,6 +219,27 @@ void input_by_hand()
     cout << "Hash: " << hash << endl;
 }
 
+void input_by_file() {
+    string input;
+    string str_placeholder;
+    cout << "File name: ";
+    cin >> input;
+
+    ifstream read;
+    read.open(input);
+    ofstream write("output.txt");
+
+    while (getline(read, str_placeholder)) {
+        string decimalString = convert_to_decimal(str_placeholder);
+        string stringDEC = convert_to_string(decimalString);
+        string scb_dec = Scrambler(decimalString, stringDEC.size());
+        string scb_string = convert_to_string(scb_dec);
+        string hash = string_to_hex(scb_string);
+
+        write << hash << endl;
+    }
+}
+
 int main()
 {
     // string myString = "la";
@@ -251,6 +272,8 @@ int main()
     if (input_type == 2)
     {
         input_by_hand();
+    }else {
+        input_by_file();
     }
     return 0;
 }
