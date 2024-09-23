@@ -73,12 +73,12 @@ string Scrambler(const string &input, int number_char)
     if (number_char > 32)
     {
         overflow = number_char - 32;
-        cout << "Number of extra char: " << overflow << endl;
+        //cout << "Number of extra char: " << overflow << endl;
 
         for (size_t i = 0; i < overflow; i++)
         {
             extras.push_back(values[0]);
-            cout << "values swaped: " << values[0] << endl;
+            //cout << "values swaped: " << values[0] << endl;
             values.erase(values.begin());
         }
 
@@ -87,14 +87,14 @@ string Scrambler(const string &input, int number_char)
 
     int padding_number = 32 - number_char;
 
-    cout << "Padding number: " << padding_number << endl;
+    //cout << "Padding number: " << padding_number << endl;
 
     for (int i = 1; i <= padding_number; i++)
     {
         if (padding_number % i == 0)
         {
             divisors.push_back(i);
-            cout << i << " ";
+            //cout << i << " ";
         }
     }
 
@@ -134,19 +134,19 @@ string Scrambler(const string &input, int number_char)
         number_of_inputs = 0;
     }
 
-    cout << input_interval << ", " << number_of_inputs << endl;
+    //cout << input_interval << ", " << number_of_inputs << endl;
 
-    for (int i : divisors)
-    {
-        cout << i << " ";
-    }
+    // for (int i : divisors)
+    // {
+    //     cout << i << " ";
+    // }
 
-    cout << endl;
+    //cout << endl;
 
     extra_scrable = getScrambleKey(extras);
     scramble_key = getScrambleKey(values) + extra_scrable;
 
-    cout << scramble_key << endl;
+    //cout << scramble_key << endl;
 
     int tracker = 0;
     int track = 0;
@@ -179,7 +179,7 @@ string Scrambler(const string &input, int number_char)
         result << (rand() % (end_N - start_N + 1)) + end_N << " ";
     }
 
-    cout << "Number of elements in string: " << element_count << endl;
+    //cout << "Number of elements in string: " << element_count << endl;
 
     values.clear();
     divisors.clear();
@@ -227,7 +227,7 @@ void input_by_file() {
 
     ifstream read;
     read.open(input);
-    ofstream write("output.txt");
+    ofstream write(input + "_output.txt");
 
     while (getline(read, str_placeholder)) {
         string decimalString = convert_to_decimal(str_placeholder);
