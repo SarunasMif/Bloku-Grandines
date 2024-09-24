@@ -6,3 +6,6 @@
 #include <iomanip>
 #include <vector>
 #include <cstdlib>
+#include <chrono>
+
+using namespace std::chrono;

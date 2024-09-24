@@ -3,7 +3,7 @@ using namespace std;
 
 const int primes[32] = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 13};
 const int start_N = 33;
-const int end_N = 126;
+const int end_N = 255;
 
 string convert_to_decimal(const string &input)
 {
@@ -73,12 +73,12 @@ string Scrambler(const string &input, int number_char)
     if (number_char > 32)
     {
         overflow = number_char - 32;
-        //cout << "Number of extra char: " << overflow << endl;
+        // cout << "Number of extra char: " << overflow << endl;
 
         for (size_t i = 0; i < overflow; i++)
         {
             extras.push_back(values[0]);
-            //cout << "values swaped: " << values[0] << endl;
+            // cout << "values swaped: " << values[0] << endl;
             values.erase(values.begin());
         }
 
@@ -87,16 +87,17 @@ string Scrambler(const string &input, int number_char)
 
     int padding_number = 32 - number_char;
 
-    //cout << "Padding number: " << padding_number << endl;
+    // cout << "Padding number: " << padding_number << endl;
 
     for (int i = 1; i <= padding_number; i++)
     {
         if (padding_number % i == 0)
         {
             divisors.push_back(i);
-            //cout << i << " ";
+            // cout << i << " ";
         }
     }
+    // cout << endl;
 
     int number_of_divisors = divisors.size();
 
@@ -134,19 +135,19 @@ string Scrambler(const string &input, int number_char)
         number_of_inputs = 0;
     }
 
-    //cout << input_interval << ", " << number_of_inputs << endl;
+    // cout << input_interval << ", " << number_of_inputs << endl;
 
     // for (int i : divisors)
     // {
     //     cout << i << " ";
     // }
 
-    //cout << endl;
+    // cout << endl;
 
     extra_scrable = getScrambleKey(extras);
-    scramble_key = getScrambleKey(values) + extra_scrable;
+    scramble_key = getScrambleKey(values) * extra_scrable;
 
-    //cout << scramble_key << endl;
+    // cout << random_key << endl;
 
     int tracker = 0;
     int track = 0;
@@ -154,7 +155,17 @@ string Scrambler(const string &input, int number_char)
 
     stringstream result;
 
-    int input_coordinate = input_interval;
+    int input_coordinate = 0;
+
+    if (input_interval == 5)
+    {
+        input_coordinate = 1;
+    }
+    else
+    {
+        input_coordinate = input_interval;
+    }
+
     for (size_t i = 0; i < input_interval; i++)
     {
         for (size_t y = 0; y < number_of_inputs; y++)
@@ -165,21 +176,17 @@ string Scrambler(const string &input, int number_char)
         input_coordinate += number_of_inputs + input_interval;
     }
 
+    srand(scramble_key);
     for (size_t i = 0; i < values.size(); i++)
     {
 
         int_placeholder = values[i] + 2;
 
-        if (int_placeholder + 2 > 126)
-        {
-            int_placeholder += 2 - 126 + 32;
-        }
-
-        srand(scramble_key + primes[i]); // decimal value sum + other value
-        result << (rand() % (end_N - start_N + 1)) + end_N << " ";
+        // srand(scramble_key + primes[i % 32]);
+        result << (rand() % (end_N - start_N + 1)) + start_N << " ";
     }
 
-    //cout << "Number of elements in string: " << element_count << endl;
+    // cout << "Number of elements in string: " << element_count << endl;
 
     values.clear();
     divisors.clear();
@@ -219,17 +226,21 @@ void input_by_hand()
     cout << "Hash: " << hash << endl;
 }
 
-void input_by_file() {
-    string input;
+void input_by_file()
+{
+    string input = "cTest_10.txt";
     string str_placeholder;
-    cout << "File name: ";
-    cin >> input;
+    int i = 0;
+    // cout << "File name: ";
+    // cin >> input;
 
     ifstream read;
     read.open(input);
     ofstream write(input + "_output.txt");
 
-    while (getline(read, str_placeholder)) {
+    auto start = high_resolution_clock::now();
+    while (getline(read, str_placeholder))
+    {
         string decimalString = convert_to_decimal(str_placeholder);
         string stringDEC = convert_to_string(decimalString);
         string scb_dec = Scrambler(decimalString, stringDEC.size());
@@ -237,7 +248,11 @@ void input_by_file() {
         string hash = string_to_hex(scb_string);
 
         write << hash << endl;
+        // cout << "Line itterated: " << i + 1 << endl;
     }
+    auto stop = high_resolution_clock::now();
+    chrono::duration<double> diff = stop - start;
+    cout << "Hashing took: " << diff.count() << " seconds" << endl;
 }
 
 int main()
@@ -272,7 +287,9 @@ int main()
     if (input_type == 2)
     {
         input_by_hand();
-    }else {
+    }
+    else
+    {
         input_by_file();
     }
     return 0;
