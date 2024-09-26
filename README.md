@@ -101,7 +101,7 @@ END
 
 - Patenkina reikalavimus visuose atvejuose hash ilgis yra 64 simboliai.
 
-### 2 ekspirimentas
+### 2 eksperimentas
 
 Ištirkite Jūsų sukurtos hash funkcijos efektyvumą, t.y., patikrinkite, kaip Jūsų hash'avimo
 funkcija atitinka 4-ą reikalavimą. Tuo tikslu pirmiausiai suhash'uokite vieną eilutę iš failo konstitucija.txt ir išmatuokite kiek laiko visa tai užtruko.
@@ -124,7 +124,7 @@ funkcija atitinka 4-ą reikalavimą. Tuo tikslu pirmiausiai suhash'uokite vieną
 | 256 | 0.0205727 s| 0.0201353 s| 0.0200644 s|
 | 512 | 0.0451074 s| 0.0457614 s| 0.0496028 s|
 
-### 3 ekspirimentas
+### 3 eksperimentas
 
 1) 25000 po 10 simbolių (random_string_pairs_10.txt)
     - Kolizijos: 0;
@@ -213,7 +213,7 @@ void test_file() {
 }
 ```
 
-### 4 ekspirimentas
+### 4 eksperimentas
 
 1) 100,000 simbolių poros nuo 1 iki 100 simboliu (random_string_pairs_max100.txt)
 
