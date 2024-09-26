@@ -1,7 +1,6 @@
 #include "includes.h"
 using namespace std;
 
-const int primes[32] = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 13};
 const int start_N = 33;
 const int end_N = 255;
 
@@ -20,7 +19,7 @@ string convert_to_decimal(const string &input)
     }
 
     return ss.str();
-}
+} // Šis kodas paima string inputa ir paverčia jį į jo decimal vertes 
 
 string convert_to_string(const string &decimalString)
 {
@@ -34,51 +33,52 @@ string convert_to_string(const string &decimalString)
     }
 
     return result;
-}
+} // Šis kodas paima string inputa ir paverčia jo vertes į charus.
 
 int getScrambleKey(vector<int> &values)
 {
-    int scramble_key;
+    int scramble_key = 1;
+    int count = 0;
 
     for (int i : values)
     {
-        scramble_key += i;
-    }
+        scramble_key *= i;
 
+        if (count == 10)
+        {
+            break;
+        }
+        count++;
+    }
     return scramble_key;
-}
+} // Suskaičiuojamas raktas, kuris bus naudojams randomizuoti hash vertes
 
 string Scrambler(const string &input, int number_char)
 {
     stringstream ss(input);
     int int_placeholder = 0;
 
-    vector<int> values;
-    vector<int> divisors;
-    vector<int> extras;
-    // Vectors to store values necessary for scrambling text
+    vector<int> values;     // Laiko vertes, kurios bus naudojamos gaut maišymo raktą
+    vector<int> divisors;   // Laiko trukstamu simboliu kiekio daliklius
 
     int number;
-    int scramble_key = 0; // Key that will be used to seed the rand() values
-    int extra_scrable = 0;
-    int input_interval;   // How many times i will need to add extra characters
-    int number_of_inputs; // How many characters to add per interval
+    int scramble_key = 0; // Raktas, kuris bus naudojamas sumaišyti vertes hashavimui
+    int input_interval;   // Vertė, kuri nurodo kiek kartų bus įvedami papildomi simboliai
+    int number_of_inputs; // Vertė, kuri nurodo kiek simbolių bus įvedama per kiekvieną intervalą
     int overflow;
 
     while (ss >> number)
     {
         values.push_back(number);
     }
+    // Vertės iš stringo įvedamos į vektorių apdorojimui
 
     if (number_char > 32)
     {
         overflow = number_char - 32;
-        // cout << "Number of extra char: " << overflow << endl;
 
         for (size_t i = 0; i < overflow; i++)
         {
-            extras.push_back(values[0]);
-            // cout << "values swaped: " << values[0] << endl;
             values.erase(values.begin());
         }
 
@@ -86,20 +86,18 @@ string Scrambler(const string &input, int number_char)
     }
 
     int padding_number = 32 - number_char;
-
-    // cout << "Padding number: " << padding_number << endl;
+    // Gaunamas kiekis kiek simbolių reikės nuimti nuo stringo, kai jų yra daugiau nei 32
 
     for (int i = 1; i <= padding_number; i++)
     {
         if (padding_number % i == 0)
         {
             divisors.push_back(i);
-            // cout << i << " ";
         }
     }
-    // cout << endl;
 
     int number_of_divisors = divisors.size();
+    // Apskaičiuojami daliklei
 
     if (number_of_divisors == 1)
     {
@@ -135,19 +133,9 @@ string Scrambler(const string &input, int number_char)
         number_of_inputs = 0;
     }
 
-    // cout << input_interval << ", " << number_of_inputs << endl;
+    // Iš daliklių parenkami skaičiai pagal, kurios bus įvedamos papildomos vertės
 
-    // for (int i : divisors)
-    // {
-    //     cout << i << " ";
-    // }
-
-    // cout << endl;
-
-    extra_scrable = getScrambleKey(extras);
-    scramble_key = getScrambleKey(values) * extra_scrable;
-
-    // cout << random_key << endl;
+    scramble_key = getScrambleKey(values);
 
     int tracker = 0;
     int track = 0;
@@ -175,22 +163,20 @@ string Scrambler(const string &input, int number_char)
 
         input_coordinate += number_of_inputs + input_interval;
     }
+    // Įvedamos papildomos vertės, jei jų reikia
 
     srand(scramble_key);
     for (size_t i = 0; i < values.size(); i++)
     {
 
-        int_placeholder = values[i] + 2;
+        int_placeholder = values[i];
 
-        // srand(scramble_key + primes[i % 32]);
         result << (rand() % (end_N - start_N + 1)) + start_N << " ";
     }
-
-    // cout << "Number of elements in string: " << element_count << endl;
+    // Vertės sumaišamos pagal raktą
 
     values.clear();
     divisors.clear();
-    extras.clear();
     return result.str();
 }
 
@@ -209,7 +195,7 @@ string string_to_hex(const string &input)
     }
 
     return output;
-}
+} // String vertės paverčiamos į hexadecimal formatą
 
 void input_by_hand()
 {
@@ -224,15 +210,15 @@ void input_by_hand()
     string hash = string_to_hex(scb_string);
 
     cout << "Hash: " << hash << endl;
-}
+} // Funkcija, kuri paima ranką įvedamą vertę ir gražina jos hasha
 
 void input_by_file()
 {
-    string input = "cTest_10.txt";
+    string input;
     string str_placeholder;
     int i = 0;
-    // cout << "File name: ";
-    // cin >> input;
+    cout << "File name: ";
+    cin >> input;
 
     ifstream read;
     read.open(input);
@@ -248,32 +234,14 @@ void input_by_file()
         string hash = string_to_hex(scb_string);
 
         write << hash << endl;
-        // cout << "Line itterated: " << i + 1 << endl;
     }
     auto stop = high_resolution_clock::now();
     chrono::duration<double> diff = stop - start;
     cout << "Hashing took: " << diff.count() << " seconds" << endl;
-}
+} // Funkcija, kuri paima input failą ir išveda suhashuotas jame esančias vertes į kitą failą
 
 int main()
 {
-    // string myString = "la";
-
-    // string decimalString = convert_to_decimal(myString);
-    // cout << "Decimal: " << decimalString << endl;
-
-    // string stringDEC = convert_to_string(decimalString);
-    // cout << "String: " << stringDEC << endl;
-
-    // string scb_dec = Scrambler(decimalString, stringDEC.size());
-    // cout << "Srambled decimal: " << scb_dec << endl;
-
-    // string scb_string = convert_to_string(scb_dec);
-    // cout << "Srambled string: " << scb_string << endl;
-
-    // string hash = string_to_hex(scb_string);
-    // cout << "Hash: " << hash << endl;
-
     int input_type;
 
     do
@@ -282,7 +250,7 @@ int main()
         cout << "Input: ";
         cin >> input_type;
 
-    } while (input_type < 1 || input_type > 2);
+    } while (input_type < 1 || input_type > 3);
 
     if (input_type == 2)
     {
@@ -292,5 +260,4 @@ int main()
     {
         input_by_file();
     }
-    return 0;
 }

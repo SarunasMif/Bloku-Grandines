@@ -7,5 +7,6 @@
 #include <vector>
 #include <cstdlib>
 #include <chrono>
+#include <time.h>
 
 using namespace std::chrono;
