@@ -204,12 +204,12 @@ void input_by_hand()
     cin >> input;
 
     string decimalString = convert_to_decimal(input);
-    string stringDEC = convert_to_string(decimalString);
-    string scb_dec = Scrambler(decimalString, stringDEC.size());
+    string scb_dec = Scrambler(decimalString, input.size());
     string scb_string = convert_to_string(scb_dec);
     string hash = string_to_hex(scb_string);
 
     cout << "Hash: " << hash << endl;
+    system("pause");
 } // Funkcija, kuri paima ranką įvedamą vertę ir gražina jos hasha
 
 void input_by_file()
@@ -224,20 +224,17 @@ void input_by_file()
     read.open(input);
     ofstream write(input + "_output.txt");
 
-    auto start = high_resolution_clock::now();
     while (getline(read, str_placeholder))
     {
         string decimalString = convert_to_decimal(str_placeholder);
-        string stringDEC = convert_to_string(decimalString);
-        string scb_dec = Scrambler(decimalString, stringDEC.size());
+        string scb_dec = Scrambler(decimalString, str_placeholder.size());
         string scb_string = convert_to_string(scb_dec);
         string hash = string_to_hex(scb_string);
 
         write << hash << endl;
     }
-    auto stop = high_resolution_clock::now();
-    chrono::duration<double> diff = stop - start;
-    cout << "Hashing took: " << diff.count() << " seconds" << endl;
+
+    system("pause");
 } // Funkcija, kuri paima input failą ir išveda suhashuotas jame esančias vertes į kitą failą
 
 int main()
