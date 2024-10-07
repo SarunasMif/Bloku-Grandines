@@ -395,3 +395,143 @@ Koliziju kiekis kiekvienu atveju buvo 0, tai hash funkcija atitinka 6 reikalavim
 Šiame teste buvo paimti testo faile rasti elementai ir išskaidyti bei užhashuoti lygiai taip pat kaip ir 3 teste. Tada pagal nurodyta kodą buvo apskaičiuotos reikšmės.
 
 Pagal šio testo išvados hash funkcija neveikia optimaliai, bet kaip 2 savaičių darbui visai neblogai.
+
+# Papildomos užduotys
+
+### 1 užduotis
+
+Spartos palyginimas tarp ssh-256 ir mano hash generatoriaus. Šis testas buvo atliekamas pasirašius ssh-256 generatoriu pagal kodą randamą šiame puslapyje `http://www.zedwood.com/article/cpp-sha256-function`. Tad buvo sugenruoti 4 testiniai failai visi po 25000 linijų, po 10, 100, 500 , 1000 ilgumo. Buvo testuojama kaip greita bus suhashintos 10, 100, 1000, 10000, 25000 linijų ir įrašytos į output failą.
+
+Failai: 
+
+- ef_10.txt
+- ef_100.txt
+- ef_500.txt
+- ef_1000.txt
+
+Testo kodai:
+
+```cpp
+#include <iostream>
+#include <fstream>
+#include <chrono>
+#include "sha256.h"
+
+using namespace std;
+using namespace chrono;
+
+int main(){
+    string input = "ef_1000.txt";
+    string str_placeholder;
+    int i = 0;
+
+    ifstream read;
+    read.open(input);
+    ofstream write(input + "_output.txt");
+
+    auto start = high_resolution_clock::now();
+    while (i < 25000) {
+        getline(read, str_placeholder);
+
+        str_placeholder = sha256(str_placeholder);
+
+        write << str_placeholder << endl;
+
+        i++;
+    }
+    auto stop = high_resolution_clock::now();
+    chrono::duration<double> diff = stop - start;
+
+    cout << diff.count() << endl;
+
+    system("pause");
+
+    return 0;
+}
+```
+
+```cpp
+auto start = high_resolution_clock::now();
+    while (i < 25000) {
+        getline(read, str_placeholder);
+
+        string decimalString = convert_to_decimal(str_placeholder);
+        string scb_dec = Scrambler(decimalString, str_placeholder.size());
+        string scb_string = convert_to_string(scb_dec);
+        string hash = string_to_hex(scb_string);
+
+        write << hash << endl;
+
+        i++;
+    }
+    auto stop = high_resolution_clock::now();
+    chrono::duration<double> diff = stop - start;
+
+    cout << diff.count() << endl;
+```
+
+Rezultatai:
+
+| ssh-256 |
+| Liniju skaicius | 10 | 100 | 1000 | 10000 | 25000 |
+| 10 | laikas | laikas | laikas | laikas | laikas |
+| :---: | :---: | :---: | :---: | :---: | :---: |
+| 1 | 0.0001885s | 0.0008776s | 0.007072s | 0.0585016s | 0.143816s |
+| 2 | 0.0001843s | 0.0007936s | 0.0066258s | 0.0537173s | 0.142012s |
+| 3 | 0.0001658s | 0.000801s | 0.0058283s | 0.056276s | 0.133865s | 
+
+| ssh-256 |
+| Liniju skaicius | 10 | 100 | 1000 | 10000 | 25000 |
+| 100 | laikas | laikas | laikas | laikas | laikas |
+| :---: | :---: | :---: | :---: | :---: | :---: |
+| 1 | 0.000248s | 0.001031s | 0.0081273s | 0.0608638s | 0.152864s |
+| 2 | 0.0001966s | 0.0007827s | 0.0076877s | 0.061863s | 0.157531s |
+| 3 | 0.0002005s | 0.0010351s | 0.0088392s | 0.0593632s | 0.158376s | 
+
+| ssh-256 |
+| Liniju skaicius | 10 | 100 | 1000 | 10000 | 25000 |
+| 500 | laikas | laikas | laikas | laikas | laikas |
+| :---: | :---: | :---: | :---: | :---: | :---: |
+| 1 | 0.0004797s | 0.0016508s | 0.0135581s | 0.102063s | 0.241124s |
+| 2 | 0.0002567s | 0.0013856s | 0.0139081s | 0.10475s | 0.252649s |
+| 3 | 0.0002175s | 0.0014006s | 0.0130472s | 0.103381s | 0.257518s | 
+
+| ssh-256 |
+| Liniju skaicius | 10 | 100 | 1000 | 10000 | 25000 |
+| 1000 | laikas | laikas | laikas | laikas | laikas |
+| :---: | :---: | :---: | :---: | :---: | :---: |
+| 1 | 0.0005612s | 0.0019457s | 0.0194008s | 0.156211s | 0.379072s |
+| 2 | 0.0002642s | 0.002026s | 0.0195892s | 0.16072s | 0.379785s |
+| 3 | 0.0002923s | 0.0018662s | 0.0165413s | 0.153447s | 0.383071s | 
+
+| Mano hash |
+| Liniju skaicius | 10 | 100 | 1000 | 10000 | 25000 |
+| 10 | laikas | laikas | laikas | laikas | laikas |
+| :---: | :---: | :---: | :---: | :---: | :---: |
+| 1 | 0.0003224s | 0.0018359s | 0.0164886s | 0.146471s | 0.348089s |
+| 2 | 0.0002707s | 0.0019488s | 0.0152511s | 0.159157s | 0.332322s |
+| 3 | 0.0002787s | 0.0018217s | 0.0170708s | 0.146476s | 0.340839s |
+
+| Mano hash |
+| Liniju skaicius | 10 | 100 | 1000 | 10000 | 25000 |
+| 100 | laikas | laikas | laikas | laikas | laikas |
+| :---: | :---: | :---: | :---: | :---: | :---: |
+| 1 | 0.0007213s | 0.0033545s | 0.03224s | 0.265788s | 0.67738s |
+| 2 | 0.0004847s | 0.003681s | 0.0294569s | 0.250297s | 0.635976s |
+| 3 | 0.0007337s | 0.0033653s | 0.0297593s | 0.260272s | 0.654822s | 
+
+| Mano hash |
+| Liniju skaicius | 10 | 100 | 1000 | 10000 | 25000 |
+| 500 | laikas | laikas | laikas | laikas | laikas |
+| :---: | :---: | :---: | :---: | :---: | :---: |
+| 1 | 0.0013865s | 0.0115651s | 0.102048s | 1.02839s | 2.56407s |
+| 2 | 0.0015027s | 0.0107514s | 0.0992344s | 1.07457s | 2.52774s |
+| 3 | 0.0012098s | 0.011023s | 0.0983781s | 1.01573s | 2.64231s | 
+
+| Mano hash |
+| Liniju skaicius | 10 | 100 | 1000 | 10000 | 25000 |
+| 1000 | laikas | laikas | laikas | laikas | laikas |
+| :---: | :---: | :---: | :---: | :---: | :---: |
+| 1 | 0.0038992s | 0.0198524s | 0.200292s | 1.94406s | 4.92643s |
+| 2 | 0.0021072s | 0.0205061s | 0.200365s | 1.93235s | 4.80392s |
+| 3 | 0.0021554s | 0.0202164s | 0.205636s | 1.92314s | 4.82039s | 
