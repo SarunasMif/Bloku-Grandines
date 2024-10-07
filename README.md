@@ -535,3 +535,7 @@ Rezultatai:
 | 1 | 0.0038992s | 0.0198524s | 0.200292s | 1.94406s | 4.92643s |
 | 2 | 0.0021072s | 0.0205061s | 0.200365s | 1.93235s | 4.80392s |
 | 3 | 0.0021554s | 0.0202164s | 0.205636s | 1.92314s | 4.82039s | 
+
+Išvados:
+
+Mano hash generatorius yra lėtesnis nuo 3 iki 10 kartų už ssh-256 generatorių.

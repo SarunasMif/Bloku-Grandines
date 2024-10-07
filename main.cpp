@@ -239,57 +239,24 @@ void input_by_file()
 
 int main()
 {
-    // int input_type;
+    int input_type;
 
-    // do
-    // {
-    //     cout << "To input by file enter [1]; To input by hand type [2];" << endl;
-    //     cout << "Input: ";
-    //     cin >> input_type;
+    do
+    {
+        cout << "To input by file enter [1]; To input by hand type [2];" << endl;
+        cout << "Input: ";
+        cin >> input_type;
 
-    // } while (input_type < 1 || input_type > 3);
+    } while (input_type < 1 || input_type > 3);
 
-    // if (input_type == 2)
-    // {
-    //     input_by_hand();
-    // }
-    // else
-    // {
-    //     input_by_file();
-    // }
-
-    string input = "ef_1000.txt";
-    string str_placeholder;
-    int i = 0;
-
-    ifstream read;
-    read.open(input);
-    ofstream write(input + "_output.txt");
-
-    // string b = sha256(str_placeholder);
-    // cout << b << endl;
-
-    // system("pause");
-
-    auto start = high_resolution_clock::now();
-    while (i < 25000) {
-        getline(read, str_placeholder);
-
-        string decimalString = convert_to_decimal(str_placeholder);
-        string scb_dec = Scrambler(decimalString, str_placeholder.size());
-        string scb_string = convert_to_string(scb_dec);
-        string hash = string_to_hex(scb_string);
-
-        write << hash << endl;
-
-        i++;
+    if (input_type == 2)
+    {
+        input_by_hand();
     }
-    auto stop = high_resolution_clock::now();
-    chrono::duration<double> diff = stop - start;
-
-    cout << diff.count() << endl;
-
-    system("pause");
+    else
+    {
+        input_by_file();
+    }
 
     return 0;
 }
