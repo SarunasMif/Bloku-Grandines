@@ -69,7 +69,6 @@ FUNCTION input_by_file()
         CONVERT scrambled decimal back to string
         CONVERT scrambled string to hexadecimal
         WRITE hexadecimal hash to output file
-    PRINT time taken to process file
 
 FUNCTION main()
     ASK user to choose input type (file or hand)
