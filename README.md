@@ -2,6 +2,7 @@
 
 # Pseudo-kodas
 
+```plaintext
 START
 
 SET start_N = 33, end_N = 255
@@ -78,6 +79,7 @@ FUNCTION main()
         CALL input_by_file()
 
 END
+```
 
 # Eksperimentinis tyrimas ir rezultatų analizė
 
