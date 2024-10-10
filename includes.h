@@ -10,6 +10,8 @@
 #include <time.h>
 
 using namespace std::chrono;
+using namespace std;
+
 
 int main();
 void input_by_file();
