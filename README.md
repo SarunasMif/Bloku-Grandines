@@ -539,4 +539,4 @@ Rezultatai:
 
 Išvados:
 
-Mano hash generatorius yra lėtesnis nuo 3 iki 10 kartų už ssh-256 generatorių.
+Mano hash generatorius yra lėtesnis nuo 2 iki 10 kartų už ssh-256 generatorių.
